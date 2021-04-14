@@ -30,3 +30,8 @@ $(BIN): $(OBJ)
 clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
 	rm -f $(BDIR)/* *~ core $(INCDIR)/*~
+
+
+cltest:
+	rm -rf test/ca/*
+	rm -rf test/dase/*

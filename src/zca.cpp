@@ -58,20 +58,23 @@ void CAManager::genSelfSignCert(string priKeyPath, string outPath, uint days,
 }
 
 
-void CAManager::signCert(string inPath, string outPath, uint days) {
+void CAManager::signCert(string caPriKeyPath, string certPath, string inPath, string outPath, uint days) {
     // e.g.: openssl ca -in subca.centos9.top.csr -out subca.centos9.top.crt -days 3650
     string cmd = OPENSSL_CA + " -in " + inPath + " -out " + outPath + " -days " + to_string(days);
+    // string cmd = OPENSSL_CA + " -key " + caPriKeyPath + " -cert " + certPath + " -in " + inPath + " -out " + outPath + " -days " + to_string(days);
     execCmd(cmd);
 }
 
 
 void CAManager::pem2crt(string inPath, string outPath) {
-    string cmd = OPENSSL_X509 + " -outform der" + " -in " + inPath + " -out " + outPath; 
+    // e.g.: openssl x509 -outform der -in /etc/pki/CA/cacert.pem -out /etc/pki/CA/cacert.crt
+    string cmd = OPENSSL_X509 + " -outform der -in " + inPath + " -out " + outPath; 
     execCmd(cmd);
 }
 
 
 void CAManager::printPemInfo(string inPath) {
+    // e.g.: openssl x509 -noout -text -in /etc/pki/CA/cacert.pem
     string cmd = OPENSSL_X509 + " -noout -text -in " + inPath;
     execCmd(cmd);
 }

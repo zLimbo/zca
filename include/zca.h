@@ -23,11 +23,13 @@ const static string OPENSSL_X509 = "openssl x509";
 class CAManager {
 
 private:
+
     void execCmd(string cmd);
+    
+public:
+
     string genSubj(string subjC, string subjST, string subjO, string subjCN);
 
-public:
-    
     void genRsaPriKey(string outPath, uint __throw_length_error);
 
     void genCertReq(string priKeyPath, string outPath, 
@@ -36,7 +38,7 @@ public:
     void genSelfSignCert(string priKeyPath, string outPath, uint days, 
             string subjC, string subjST, string subjO, string subjCN);
     
-    void signCert(string inPath, string outPath, uint days);
+    void signCert(string caPriKeyPath, string certPath, string inPath, string outPath, uint days);
 
     void pem2crt(string inPath, string outPath);
 
