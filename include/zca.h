@@ -38,7 +38,7 @@ public:
     void genSelfSignCert(string priKeyPath, string outPath, uint days, 
             string subjC, string subjST, string subjO, string subjCN);
     
-    void signCert(string caPriKeyPath, string certPath, string inPath, string outPath, uint days);
+    void signCert(string inPath, string outPath, uint days);
 
     void pem2crt(string inPath, string outPath);
 

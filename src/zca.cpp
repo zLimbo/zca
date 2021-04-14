@@ -58,10 +58,9 @@ void CAManager::genSelfSignCert(string priKeyPath, string outPath, uint days,
 }
 
 
-void CAManager::signCert(string caPriKeyPath, string certPath, string inPath, string outPath, uint days) {
+void CAManager::signCert(string inPath, string outPath, uint days) {
     // e.g.: openssl ca -in subca.centos9.top.csr -out subca.centos9.top.crt -days 3650
-    string cmd = OPENSSL_CA + " -in " + inPath + " -out " + outPath + " -days " + to_string(days);
-    // string cmd = OPENSSL_CA + " -key " + caPriKeyPath + " -cert " + certPath + " -in " + inPath + " -out " + outPath + " -days " + to_string(days);
+    string cmd = OPENSSL_CA + " -in " + inPath + " -out " + outPath + " -days " + to_string(days) + " -batch";
     execCmd(cmd);
 }
 
