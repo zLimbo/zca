@@ -1,5 +1,6 @@
-#include "zca.h"
+#include "zcamgr.h"
 #include <iostream>
+#include <fstream>
 
 namespace zlimbo {
 
@@ -7,6 +8,26 @@ namespace ca {
 
 using std::cout;
 using std::endl;
+using std::ifstream;
+using std::to_string;
+
+const string CAManager::OPENSSL = "openssl";
+const string CAManager::OPENSSL_GENRSA = "openssl genrsa";
+const string CAManager::OPENSSL_CA = "openssl ca";
+const string CAManager::OPENSSL_REQ = "openssl req";
+const string CAManager::OPENSSL_X509 = "openssl x509";
+const string CAManager::OPENSSL_VERIFY = "openssl verify";
+
+const string CAManager::SERIAL_FILE_NAME = "serial";
+
+
+string CAManager::readSerialFromFile() {
+    string serial;
+    ifstream fin(caDir + "/" + SERIAL_FILE_NAME);
+    fin >> serial;
+    cout << "serial: " << serial << endl;
+    return serial;
+}
 
 
 void CAManager::execCmd(string cmd) {
@@ -33,9 +54,9 @@ inline string CAManager::genSubj(string subjC, string subjST, string subjO, stri
 }
 
 
-void CAManager::genRsaPriKey(string outPath, uint length) {
+void CAManager::genRsaPriKey(string outPath, uint len) {
     // e.g.: openssl genrsa -out /etc/pki/tls/private/subcakey.pem 2048
-    string cmd = OPENSSL_GENRSA + " -out " + outPath + " " + to_string(length);
+    string cmd = OPENSSL_GENRSA + " -out " + outPath + " " + to_string(len);
     execCmd(cmd);
 }
 
@@ -58,6 +79,13 @@ void CAManager::genSelfSignCert(string priKeyPath, string outPath, uint days,
 }
 
 
+void CAManager::signCert(string inPath, uint days) {
+    // e.g.: openssl ca -in subca.centos9.top.csr -out subca.centos9.top.crt -days 3650
+    string cmd = OPENSSL_CA + " -in " + inPath + " -days " + to_string(days) + " -batch";
+    execCmd(cmd);
+}
+
+
 void CAManager::signCert(string inPath, string outPath, uint days) {
     // e.g.: openssl ca -in subca.centos9.top.csr -out subca.centos9.top.crt -days 3650
     string cmd = OPENSSL_CA + " -in " + inPath + " -out " + outPath + " -days " + to_string(days) + " -batch";
@@ -65,7 +93,14 @@ void CAManager::signCert(string inPath, string outPath, uint days) {
 }
 
 
-void CAManager::pem2crt(string inPath, string outPath) {
+void CAManager::verify(string caCertPath, string certPath) {
+    // e.g.: openssl verify -CAfile cacert.pem bob.pem
+    string cmd = OPENSSL_VERIFY + " -CAfile " + caCertPath + " " + certPath;
+    execCmd(cmd);
+}
+
+
+void CAManager::pem2der(string inPath, string outPath) {
     // e.g.: openssl x509 -outform der -in /etc/pki/CA/cacert.pem -out /etc/pki/CA/cacert.crt
     string cmd = OPENSSL_X509 + " -outform der -in " + inPath + " -out " + outPath; 
     execCmd(cmd);
