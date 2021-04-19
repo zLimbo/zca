@@ -31,11 +31,14 @@ $(ODIR)/%.o: $(SDIR)/%.cpp
 $(BIN): $(OBJ)
 	$(CPP) -o $@ $^ $(CPPFLAGS) $(LIBS)
 
-server: $(OBJ)
-	$(CPP) -o bin/server src/server.cpp obj/zserver.o $(CPPFLAGS) $(LIBS)
 
-client: $(OBJ)
-	$(CPP) -o bin/client src/client.cpp obj/zclient.o $(CPPFLAGS) $(LIBS)
+test_server: $(OBJ)
+	$(CPP) -o bin/test_server src/test_server.cpp obj/zserver.o obj/zcamgr.o $(CPPFLAGS) $(LIBS)
+
+test_client: $(OBJ)
+	$(CPP) -o bin/test_client src/test_client.cpp obj/zclient.o obj/zcamgr.o $(CPPFLAGS) $(LIBS)
+
+test: test_server test_client
 
 
 .PHONY: clean

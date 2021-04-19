@@ -25,7 +25,6 @@ string CAManager::readSerialFromFile() {
     string serial;
     ifstream fin(caDir + "/" + SERIAL_FILE_NAME);
     fin >> serial;
-    cout << "serial: " << serial << endl;
     return serial;
 }
 

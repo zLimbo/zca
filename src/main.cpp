@@ -16,7 +16,7 @@ void testRootCA() {
     
     // 相关机构构建证书申请
     caMgr.genRsaPriKey("./demoReq/priKey.pem", 2048u);
-    caMgr.genCertReq("./demoReq/priKey.pem", "./demoReq/certReq.pem", "CN", "SH", "ECNU", "DASE7");
+    caMgr.genCertReq("./demoReq/priKey.pem", "./demoReq/certReq.pem", "CN", "SH", "ECNU", "DASE8");
     
     // ca签署证书
     caMgr.signCert("./demoReq/certReq.pem", "./demoReq/signCert.pem", 365u);
@@ -27,16 +27,11 @@ void testRootCA() {
     caMgr.verify("./demoCA/cacert.pem", "./demoReq/signCert.pem");
 }
 
-void testCAServer() {
-    zlimbo::ca::CAServer caServer("127.0.0.1", 8888);
-    caServer.start();
-}
-
 int main() {
 
-    testCAServer();
+    // testCAServer();
 
-    // testRootCA();
+    testRootCA();
 
 
     // uint serial;

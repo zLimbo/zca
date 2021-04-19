@@ -14,10 +14,11 @@ using std::endl;
 
 
 void CAClient::sendCertReq(string url, uint port, string inPath, string outPath) {
+    cout << "sendCertReq start" << endl;
     char buffer[BUF_SIZE] = {0};
     int num = 0;
     FILE *fp = nullptr;
-
+    
     clientSocketFd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     struct sockaddr_in serverAddr;
     memset(&serverAddr, 0, sizeof(serverAddr));
@@ -35,6 +36,7 @@ void CAClient::sendCertReq(string url, uint port, string inPath, string outPath)
         write(clientSocketFd, buffer, num);
     }
     fclose(fp);
+    shutdown(clientSocketFd, SHUT_WR);
 
     
     if ( (fp = fopen(outPath.data(), "wb")) == nullptr) {
@@ -42,7 +44,7 @@ void CAClient::sendCertReq(string url, uint port, string inPath, string outPath)
         exit(-1);
     }
     cout << "receive cert " << outPath << " ..." << endl;
-    while ( (num = read(clientSocketFd, buffer, BUF_SIZE)) > 0) {
+    if ( (num = read(clientSocketFd, buffer, BUF_SIZE)) > 0) {
         fwrite(buffer, 1, BUF_SIZE, fp);
     }
     fclose(fp);

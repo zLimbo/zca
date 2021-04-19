@@ -29,6 +29,7 @@ void CAServer::bindAndListen() {
     serverAddr.sin_port = htons(port);
     bind(serverSocketFd, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
     listen(serverSocketFd, queueNum);
+    isOpen = true;
     cout << "CA server listen on " << url << ":" << port << endl;
 }
 
@@ -52,14 +53,14 @@ void CAServer::loopHandleConnect() {
             cout << "open file " + reqPath + " failed!" << endl;
             exit(-1);
         }
-        while ( (num = read(clientSocketFd, buffer, BUF_SIZE)) > 0) {
-            fwrite(buffer, num, 1, fp);
+        if ( (num = read(clientSocketFd, buffer, BUF_SIZE)) > 0) {
+            fwrite(buffer, 1, num, fp);
         }
         fclose(fp);
 
         caMgr.signCert(reqPath, CAManager::DEFUALT_DAYS);
-
-        string certPath = caMgr.getCaDir() + "/newcert/" + serial + ".pem";
+        
+        string certPath = caMgr.getCaDir() + "/newcerts/" + serial + ".pem";
         if ( (fp = fopen(certPath.data(), "rb")) == nullptr) {
             cout << "open file " + certPath + " failed!" << endl;
             exit(-1);
@@ -82,8 +83,7 @@ void CAServer::start() {
     loopHandleConnect();
 }
 
-    
-    
+
 
 } // namespace ca
 
