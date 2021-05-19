@@ -13,6 +13,7 @@ using std::to_string;
 
 const string CAManager::OPENSSL = "openssl";
 const string CAManager::OPENSSL_GENRSA = "openssl genrsa";
+const string CAManager::OPENSSL_ECPARAM_GENKEY_SM2 = "openssl ecparam -genkey -name SM2";
 const string CAManager::OPENSSL_CA = "openssl ca";
 const string CAManager::OPENSSL_REQ = "openssl req";
 const string CAManager::OPENSSL_X509 = "openssl x509";
@@ -56,6 +57,13 @@ inline string CAManager::genSubj(string subjC, string subjST, string subjO, stri
 void CAManager::genRsaPriKey(string outPath, uint len) {
     // e.g.: openssl genrsa -out /etc/pki/tls/private/subcakey.pem 2048
     string cmd = OPENSSL_GENRSA + " -out " + outPath + " " + to_string(len);
+    execCmd(cmd);
+}
+
+
+void CAManager::genSm2PriKey(string outPath) {
+    // e.g.: openssl ecparam -genkey -name SM2 -out /etc/pki/tls/private/subcakey.pem
+    string cmd = OPENSSL_ECPARAM_GENKEY_SM2 + " -out " + outPath;
     execCmd(cmd);
 }
 

@@ -33,10 +33,10 @@ $(BIN): $(OBJ)
 
 
 test_server: $(OBJ)
-	$(CPP) -o bin/test_server src/test_server.cpp obj/zserver.o obj/zcamgr.o $(CPPFLAGS) $(LIBS)
+	$(CPP) -o bin/test_server test/test_server.cpp obj/zserver.o obj/zcamgr.o $(CPPFLAGS) $(LIBS)
 
 test_client: $(OBJ)
-	$(CPP) -o bin/test_client src/test_client.cpp obj/zclient.o obj/zcamgr.o $(CPPFLAGS) $(LIBS)
+	$(CPP) -o bin/test_client test/test_client.cpp obj/zclient.o obj/zcamgr.o $(CPPFLAGS) $(LIBS)
 
 test: test_server test_client
 

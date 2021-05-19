@@ -20,6 +20,7 @@ public:
     static const string OPENSSL_REQ;
     static const string OPENSSL_X509;
     static const string OPENSSL_VERIFY;
+    static const string OPENSSL_ECPARAM_GENKEY_SM2;
 
     static const string SERIAL_FILE_NAME;
 
@@ -35,6 +36,8 @@ public:
     string genSubj(string subjC, string subjST, string subjO, string subjCN);
 
     void genRsaPriKey(string outPath, uint len);
+
+    void genSm2PriKey(string outPath);
 
     void genCertReq(string priKeyPath, string outPath, 
             string subjC, string subjST, string subjO, string subjCN);
