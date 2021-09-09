@@ -30,7 +30,7 @@ string CAManager::readSerialFromFile() {
 }
 
 
-void CAManager::execCmd(string cmd) {
+void CAManager::execCmd(const string& cmd) {
     cout << "\n>>> cmd: " << cmd << endl;
 
     char line[1024];
@@ -48,28 +48,28 @@ void CAManager::execCmd(string cmd) {
 }
 
 
-inline string CAManager::genSubj(string subjC, string subjST, string subjO, string subjCN) {
+inline string CAManager::genSubj(const string& subjC, const string& subjST, const string& subjO, const string& subjCN) {
     string subj = "/C=" + subjC + "/ST=" + subjST + "/O=" + subjO + "/CN=" + subjCN; 
     return subj;
 }
 
 
-void CAManager::genRsaPriKey(string outPath, uint len) {
+void CAManager::genRsaPriKey(const string& outPath, uint len) {
     // e.g.: openssl genrsa -out /etc/pki/tls/private/subcakey.pem 2048
     string cmd = OPENSSL_GENRSA + " -out " + outPath + " " + to_string(len);
     execCmd(cmd);
 }
 
 
-void CAManager::genSm2PriKey(string outPath) {
+void CAManager::genSm2PriKey(const string& outPath) {
     // e.g.: openssl ecparam -genkey -name SM2 -out /etc/pki/tls/private/subcakey.pem
     string cmd = OPENSSL_ECPARAM_GENKEY_SM2 + " -out " + outPath;
     execCmd(cmd);
 }
 
 
-void CAManager::genCertReq(string priKeyPath, string outPath, 
-        string subjC, string subjST, string subjO, string subjCN) {
+void CAManager::genCertReq(const string& priKeyPath, const string& outPath, 
+        const string& subjC, const string& subjST, const string& subjO, const string& subjCN) {
     // e.g.: openssl req -new -key /etc/pki/tls/private/subcakey.pem -out /etc/pki/tls/subca.csr -subj /C=CN/ST=GD/O=LINZ/CN=SubCA
     string subj = genSubj(subjC, subjST, subjO, subjCN);
     string cmd = OPENSSL_REQ + " -new -key " + priKeyPath + " -out " + outPath + " -subj " + subj;
@@ -77,8 +77,8 @@ void CAManager::genCertReq(string priKeyPath, string outPath,
 }
 
 
-void CAManager::genSelfSignCert(string priKeyPath, string outPath, uint days, 
-            string subjC, string subjST, string subjO, string subjCN) {
+void CAManager::genSelfSignCert(const string& priKeyPath, const string& outPath, uint days, 
+            const string& subjC, const string& subjST, const string& subjO, const string& subjCN) {
     // e.g.: openssl req -new -x509 -key /etc/pki/CA/private/cakey.pem -days 7300 -out /etc/pki/CA/cacert.pem -subj /C=CN/ST=GD/O=LINZ/CN=RootCA
     string subj = genSubj(subjC, subjST, subjO, subjCN);
     string cmd = OPENSSL_REQ + " -new -x509 -key " + priKeyPath + " -out " + outPath + " -days " + to_string(days) + " -subj " + subj;
@@ -86,35 +86,35 @@ void CAManager::genSelfSignCert(string priKeyPath, string outPath, uint days,
 }
 
 
-void CAManager::signCert(string inPath, uint days) {
+void CAManager::signCert(const string& inPath, uint days) {
     // e.g.: openssl ca -in subca.centos9.top.csr -out subca.centos9.top.crt -days 3650
     string cmd = OPENSSL_CA + " -in " + inPath + " -days " + to_string(days) + " -batch";
     execCmd(cmd);
 }
 
 
-void CAManager::signCert(string inPath, string outPath, uint days) {
+void CAManager::signCert(const string& inPath, const string& outPath, uint days) {
     // e.g.: openssl ca -in subca.centos9.top.csr -out subca.centos9.top.crt -days 3650
     string cmd = OPENSSL_CA + " -in " + inPath + " -out " + outPath + " -days " + to_string(days) + " -batch";
     execCmd(cmd);
 }
 
 
-void CAManager::verify(string caCertPath, string certPath) {
+void CAManager::verify(const string& caCertPath, const string& certPath) {
     // e.g.: openssl verify -CAfile cacert.pem bob.pem
     string cmd = OPENSSL_VERIFY + " -CAfile " + caCertPath + " " + certPath;
     execCmd(cmd);
 }
 
 
-void CAManager::pem2der(string inPath, string outPath) {
+void CAManager::pem2der(const string& inPath, const string& outPath) {
     // e.g.: openssl x509 -outform der -in /etc/pki/CA/cacert.pem -out /etc/pki/CA/cacert.crt
     string cmd = OPENSSL_X509 + " -outform der -in " + inPath + " -out " + outPath; 
     execCmd(cmd);
 }
 
 
-void CAManager::printPemInfo(string inPath) {
+void CAManager::printPemInfo(const string& inPath) {
     // e.g.: openssl x509 -noout -text -in /etc/pki/CA/cacert.pem
     string cmd = OPENSSL_X509 + " -noout -text -in " + inPath;
     execCmd(cmd);

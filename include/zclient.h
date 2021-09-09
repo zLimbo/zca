@@ -22,7 +22,7 @@ private:
 
 public:
 
-    void sendCertReq(string url, uint port, string inPath, string outPath);
+    void sendCertReq(const string& url, uint port, const string& inPath, const string& outPath);
     
 };
 

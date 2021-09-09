@@ -13,7 +13,7 @@ using std::cout;
 using std::endl;
 
 
-void CAClient::sendCertReq(string url, uint port, string inPath, string outPath) {
+void CAClient::sendCertReq(const string& url, uint port, const string& inPath, const string& outPath) {
     cout << "sendCertReq start" << endl;
     char buffer[BUF_SIZE] = {0};
     int num = 0;

@@ -30,35 +30,35 @@ private:
     string caDir;
     
 private:
-    void execCmd(string cmd);
+    void execCmd(const string& cmd);
 
 public:
-    string genSubj(string subjC, string subjST, string subjO, string subjCN);
+    string genSubj(const string& subjC, const string& subjST, const string& subjO, const string& subjCN);
 
-    void genRsaPriKey(string outPath, uint len);
+    void genRsaPriKey(const string& outPath, uint len);
 
-    void genSm2PriKey(string outPath);
+    void genSm2PriKey(const string& outPath);
 
-    void genCertReq(string priKeyPath, string outPath, 
-            string subjC, string subjST, string subjO, string subjCN);
+    void genCertReq(const string& priKeyPath, const string& outPath, 
+            const string& subjC, const string& subjST, const string& subjO, const string& subjCN);
 
-    void genSelfSignCert(string priKeyPath, string outPath, uint days, 
-            string subjC, string subjST, string subjO, string subjCN);
+    void genSelfSignCert(const string& priKeyPath, const string& outPath, uint days, 
+            const string& subjC, const string& subjST, const string& subjO, const string& subjCN);
     
-    void signCert(string inPath, uint days);
-    void signCert(string inPath, string outPath, uint days);
+    void signCert(const string& inPath, uint days);
+    void signCert(const string& inPath, const string& outPath, uint days);
 
-    void verify(string caCertPath, string certPath);
+    void verify(const string& caCertPath, const string& certPath);
 
-    void pem2der(string inPath, string outPath);
+    void pem2der(const string& inPath, const string& outPath);
 
-    void printPemInfo(string inPath);
+    void printPemInfo(const string& inPath);
 
     string readSerialFromFile();
 
 
 public:
-    CAManager(string caDir = "./demoCA"): caDir(caDir) {}
+    CAManager(const string& caDir = "./demoCA"): caDir(caDir) {}
 
     string getCaDir() const { return caDir; }
     
